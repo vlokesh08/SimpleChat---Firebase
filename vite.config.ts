@@ -5,10 +5,9 @@ import { defineConfig } from "vite"
 export default defineConfig({
   plugins: [react()],
   server: {
-    port: 3030
-  },
-  preview: {
-    port: 8080
+    host: '0.0.0.0',
+    port: 3000, // Default is usually 3000, but you can set any free port
+    strictPort: true, // Ensures Vite throws an error if the port is already in use
   },
   resolve: {
     alias: {
