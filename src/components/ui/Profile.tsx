@@ -11,7 +11,6 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import EditProfile from "./EditProfile";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -28,7 +27,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useDispatch } from "react-redux";
 import { loginFailure } from "@/Redux/Slice/useSlice";
-import { Navigate } from "react-router";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "@/firebase";
 import { updateUser } from "@/Redux/Slice/useSlice";

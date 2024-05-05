@@ -1,6 +1,6 @@
 import Login from "@/components/Auth/Login";
 import Signup from "@/components/Auth/Signup";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 const Auth = () => {
   return (
     <div>

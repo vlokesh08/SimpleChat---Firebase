@@ -1,4 +1,4 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {  TabsContent } from "@/components/ui/tabs";
 import {
   Card,
   CardContent,
@@ -27,6 +27,7 @@ const Login = () => {
     const res = signInWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
         // Signed in
+        console.log(res)
         const user = userCredential.user;
         // get name and imageurl from firebase
         const docRef = doc(db, "users", user.uid);

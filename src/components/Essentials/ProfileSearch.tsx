@@ -1,20 +1,11 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { db } from "@/firebase";
-import { collection, query, where, getDocs, setDoc, doc, updateDoc, arrayUnion, serverTimestamp } from "firebase/firestore";
-import { timeStamp } from "console";
+import { collection, query, where, getDocs, setDoc, doc, arrayUnion } from "firebase/firestore";
 import { useSelector } from "react-redux";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 // Mock data for profiles
-const profiles = [
-  { id: 1, username: "alice123", avatarUrl: "https://via.placeholder.com/150" },
-  { id: 2, username: "bob456", avatarUrl: "https://via.placeholder.com/150" },
-  {
-    id: 3,
-    username: "charlie789",
-    avatarUrl: "https://via.placeholder.com/150",
-  },
-];
+
 interface Profile {
   id: number;
   username: string;
