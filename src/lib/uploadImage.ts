@@ -33,7 +33,7 @@ const upload = (file: any) => {
       }
     },
     (error) => {
-      reject("Something went wrong")
+      reject("Something went wrong", error)
     },
     () => {
       // Handle successful uploads on complete

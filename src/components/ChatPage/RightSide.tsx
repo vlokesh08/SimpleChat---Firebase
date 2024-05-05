@@ -28,7 +28,6 @@ const RightSide = () => {
   const [userdetails, setUserDetails] = useState<UserDetails>({});
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     socket.on("receive-message", (message: Message) => {
@@ -107,11 +106,10 @@ const RightSide = () => {
     if (userId) {
       const unsubscribe = onSnapshot(doc(db, "users", userId), (userDoc) => {
         setUserDetails(userDoc.data() as UserDetails);
-        setIsLoading(false);
       });
       userUnsubscribe = unsubscribe;
     } else {
-      setIsLoading(false);
+      console.log("no user id")
     }
 
     return () => {
