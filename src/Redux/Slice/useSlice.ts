@@ -29,6 +29,12 @@ const userSlice = createSlice({
       state.user.fullName = name;
       state.user.pic = picture;
     },
+    updateUser : (state, action) => { 
+      const { username, name, pic } = action.payload;
+      state.user.username = username;
+      state.user.fullName = name;
+      state.user.pic = pic;
+    },
     loginFailure: (state) => {
       state.user = initialState.user;
     },
@@ -38,5 +44,5 @@ const userSlice = createSlice({
   },
 });
 
-export const {  loginSuccess, loginFailure, logout } = userSlice.actions;
+export const {  loginSuccess, loginFailure, logout, updateUser } = userSlice.actions;
 export default userSlice.reducer;

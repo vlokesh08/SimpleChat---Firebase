@@ -2,10 +2,11 @@ import {useSelector} from "react-redux"
 import {Navigate} from "react-router-dom"
 
 const Protect = ({children} : any) => {
-    const user = useSelector((state: any) => state.user);
+    const user = useSelector((state: any) => state.user.user);
     
     if(!user.id) {
-        return <Navigate to="/" />
+        console.log("user not found")
+        window.location.href = "/login"
     }
  return children
 

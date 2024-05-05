@@ -3,6 +3,8 @@ import { db } from "@/firebase";
 import { collection, query, where, getDocs, setDoc, doc, updateDoc, arrayUnion, serverTimestamp } from "firebase/firestore";
 import { timeStamp } from "console";
 import { useSelector } from "react-redux";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
 // Mock data for profiles
 const profiles = [
   { id: 1, username: "alice123", avatarUrl: "https://via.placeholder.com/150" },
@@ -22,7 +24,7 @@ interface Profile {
 function ProfileSearch() {
   const [input, setInput] = useState("");
   const [filteredProfiles, setFilteredProfiles] = useState<Profile[]>([]);
-  const user = useSelector((state: any) => state.user);
+  const user = useSelector((state: any) => state.user.user);
   // Handle input change
   const handleInputChange = async (event: any) => {
 
@@ -60,34 +62,27 @@ function ProfileSearch() {
 
     try {
       const newChatRef = doc(chatRef);
-      setDoc(newChatRef, {
-        createdAt : serverTimestamp(),
-        messages : [],
-      }
-      );
 
+      const chatData = {
+        chatId: newChatRef.id,
+        receiverId: user.id,
+        lastMessage: "",
+        seen : false,
+        updatedAt: Date.now(),
+      };
+      
+      // Update the current user's chat document
+      setDoc(doc(userChatRef, uid), { chats: arrayUnion(chatData) }, { merge: true });
 
-      updateDoc(doc(userChatRef, uid), {
-        chats : arrayUnion(
-          {
-            chatId : newChatRef.id,
-            receiverId : user.id,
-            lastMessage : "",
-            updatedAt : Date.now(),
-          }
-        )
-      });
+      const chatData2 = {
+        chatId: newChatRef.id,
+        receiverId: uid,
+        lastMessage: "",
+        seen : false,
+        updatedAt: Date.now(),
+      };
 
-      updateDoc(doc(userChatRef, user.id), {
-        chats : arrayUnion(
-          {
-            chatId : newChatRef.id,
-            receiverId : uid,
-            lastMessage : "",
-            updatedAt : Date.now(),
-          }
-        )
-      });
+      setDoc(doc(userChatRef, user.id), { chats: arrayUnion(chatData2) }, { merge: true });
 
     } catch (error) {
       
@@ -96,13 +91,13 @@ function ProfileSearch() {
 
   return (
     <div>
-      <input
+      <Input
         type="text"
         value={input}
         onChange={handleInputChange}
         placeholder="Search profiles..."
         style={{ padding: "10px", width: "300px", marginBottom: "10px" }}
-        className="text-black"
+        className="dark:text-white text-black"
       />
       {filteredProfiles.length > 0 && (
         <div
@@ -134,11 +129,11 @@ function ProfileSearch() {
                 }}
               />
               <span style={{ flexGrow: 1 }}>{profile.username}</span>
-              <button
+              <Button
                 onClick={() => handleClick(profile.id)}
               >
                 Chat
-              </button>
+              </Button>
             </div>
           ))}
         </div>

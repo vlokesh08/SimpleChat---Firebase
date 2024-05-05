@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   chatId: null,
+  userId : null,
   lastMessage: null,
   extraData: null,
 };
@@ -14,11 +15,13 @@ const chatSlice = createSlice({
     setChatData: (state, action) => {
         // console.log(action.payload);
       state.chatId = action.payload.chatId;
+      state.userId = action.payload.userId;
       state.lastMessage = action.payload.lastMessage;
       state.extraData = action.payload.extraData;
     },
     resetChatData: (state) => {
       state.chatId = null;
+      state.userId = null;
       state.lastMessage = null;
       state.extraData = null;
     },
