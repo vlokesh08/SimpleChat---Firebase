@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { db } from "@/firebase";
-import { collection, query, where, getDocs, setDoc, doc, arrayUnion } from "firebase/firestore";
+import { collection, query, where, getDocs, setDoc, doc, arrayUnion, getDoc } from "firebase/firestore";
 import { useSelector } from "react-redux";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
@@ -46,39 +46,54 @@ function ProfileSearch() {
 
   const handleClick = async (uid: any) => {
     // Handle click on profile
-    console.log(`Clicked on profile with id ${uid}`);
+    // console.log(`Clicked on profile with id ${uid}`);
 
     const chatRef = collection(db, "chats");
     const userChatRef = collection(db, "userChats");
 
     try {
-      const newChatRef = doc(chatRef);
+        // Get the current user's username
+        // const currentUserSnapshot = await getDoc(doc(db, "users", user.id));
+        // const currentUserData = currentUserSnapshot.data();
 
-      const chatData = {
-        chatId: newChatRef.id,
-        receiverId: user.id,
-        lastMessage: "",
-        seen : false,
-        updatedAt: Date.now(),
-      };
-      
-      // Update the current user's chat document
-      setDoc(doc(userChatRef, uid), { chats: arrayUnion(chatData) }, { merge: true });
+        // Check if the same user's username is entered
+        if (uid === user.id) {
+            console.log("Cannot start a chat with yourself.");
+            return;
+        }
 
-      const chatData2 = {
-        chatId: newChatRef.id,
-        receiverId: uid,
-        lastMessage: "",
-        seen : false,
-        updatedAt: Date.now(),
-      };
+        // Check if the user is already in the userChats collection of that ID
+        const userChatSnapshot = await getDoc(doc(userChatRef, user.id));
+        const userChatData = userChatSnapshot.data();
+        if (userChatData && userChatData.chats) {
+            const existingChat = userChatData.chats.find((chat: any) => chat.receiverId === uid);
+            if (existingChat) {
+                console.log("Chat with this user already exists.");
+                return;
+            }
+        }
 
-      setDoc(doc(userChatRef, user.id), { chats: arrayUnion(chatData2) }, { merge: true });
+        // Create a new chat document
+        const newChatRef = doc(chatRef);
+        const chatData = {
+            chatId: newChatRef.id,
+            receiverId: uid,
+            lastMessage: "",
+            seen: false,
+            updatedAt: Date.now(),
+        };
+
+        // Update the current user's chat document
+        await setDoc(doc(userChatRef, user.id), { chats: arrayUnion(chatData) }, { merge: true });
+
+        // Update the receiver's chat document
+        await setDoc(doc(userChatRef, uid), { chats: arrayUnion(chatData) }, { merge: true });
 
     } catch (error) {
-      
+        console.error("Error handling click:", error);
     }
-  };
+};
+
 
   return (
     <div>

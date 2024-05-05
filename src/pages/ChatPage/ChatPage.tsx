@@ -18,6 +18,7 @@ export default function ChatPage() {
 
   useEffect(() => {
     dispatch(resetChatData());
+    console.log("Authenticating user")
     socket.emit("authenticate", user.id);
   }, []);
 
