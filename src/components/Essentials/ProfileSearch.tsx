@@ -79,24 +79,29 @@ function ProfileSearch() {
           createdAt : serverTimestamp(),
           messages: [],
         });
-        const chatData = {
+
+        // Update the current user's chat document
+        await setDoc(doc(userChatRef, user.id), { chats: arrayUnion(
+          {
             chatId: newChatRef.id,
             receiverId: uid,
             lastMessage: "",
             seen: false,
             updatedAt: Date.now(),
-        };
-
-        // Update the current user's chat document
-        await setDoc(doc(userChatRef, user.id), { chats: arrayUnion(chatData) }, { merge: true });
+        }
+        ) }, { merge: true });
 
         // Update the receiver's chat document
-        await setDoc(doc(userChatRef, uid), { chats: arrayUnion(chatData) }, { merge: true });
+        await setDoc(doc(userChatRef, uid), { chats: arrayUnion(
+          {
+            chatId: newChatRef.id,
+            receiverId: user.id,
+            lastMessage: "",
+            seen: false,
+            updatedAt: Date.now(),
+        }
+        ) }, { merge: true });
 
-        await setDoc(newChatRef, {
-          createdAt : serverTimestamp(),
-          messages: [],
-        });
 
     } catch (error) {
         console.error("Error handling click:", error);
