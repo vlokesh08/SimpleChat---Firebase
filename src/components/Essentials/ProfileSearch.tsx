@@ -75,6 +75,10 @@ function ProfileSearch() {
 
         // Create a new chat document
         const newChatRef = doc(chatRef);
+        await setDoc(newChatRef, {
+          createdAt : serverTimestamp(),
+          messages: [],
+        });
         const chatData = {
             chatId: newChatRef.id,
             receiverId: uid,
