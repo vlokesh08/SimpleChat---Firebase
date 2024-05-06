@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { db } from "@/firebase";
-import { collection, query, where, getDocs, setDoc, doc, arrayUnion, getDoc } from "firebase/firestore";
+import { collection, query, where, getDocs, setDoc, doc, arrayUnion, getDoc, serverTimestamp } from "firebase/firestore";
 import { useSelector } from "react-redux";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
@@ -88,6 +88,11 @@ function ProfileSearch() {
 
         // Update the receiver's chat document
         await setDoc(doc(userChatRef, uid), { chats: arrayUnion(chatData) }, { merge: true });
+
+        await setDoc(newChatRef, {
+          createdAt : serverTimestamp(),
+          messages: [],
+        });
 
     } catch (error) {
         console.error("Error handling click:", error);
